@@ -29,8 +29,6 @@ def download_beatmap(beatmapset: ossapi.Beatmapset, osu_session: str):
     beatmap_filename = f"{beatmapset.id} {beatmapset.artist} - {beatmapset.title}.osz"
     download_folder = BASE_BEATMAPSET_FOLDER / str(beatmapset.ranked_date.year)
 
-    print(f'Starting download of "{beatmap_filename}"')
-
     if not download_folder.exists():
         download_folder.mkdir(0o755)
 
@@ -56,5 +54,3 @@ def download_beatmap(beatmapset: ossapi.Beatmapset, osu_session: str):
             for data in r.iter_content(chunk_size=1024):
                 size = f.write(data)
                 bar.update(size)
-
-    print(f'Finished downloading "{beatmap_filename}"')
