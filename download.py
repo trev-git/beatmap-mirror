@@ -18,6 +18,7 @@ import ossapi
 import os
 import pathlib
 import requests
+from tqdm import tqdm
 
 
 BASE_BEATMAPSET_URL = 'https://osu.ppy.sh/beatmapsets'
@@ -42,8 +43,18 @@ def download_beatmap(beatmapset: ossapi.Beatmapset, osu_session: str):
         s.headers = {
             'Referer': f'https://osu.ppy.sh/beatmapsets/{beatmapset.id}'
         }
+        s.stream = True
         r = s.get(f'https://osu.ppy.sh/beatmapsets/{beatmapset.id}/download')
-        with open(download_folder / beatmap_filename, "wb") as f:
-            f.write(r.content)
+        total = int(r.headers.get('content-length', 0))
+        with open(download_folder / beatmap_filename, "wb") as f, tqdm(
+            desc=beatmap_filename,
+            total=total,
+            unit='iB',
+            unit_scale=True,
+            unit_divisor=1024,
+        ) as bar:
+            for data in r.iter_content(chunk_size=1024):
+                size = f.write(data)
+                bar.update(size)
 
     print(f'Finished downloading "{beatmap_filename}"')
