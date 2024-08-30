@@ -42,7 +42,7 @@ def main():
             else:
                 query += f'ranked<{year}-{month+1}-01'
 
-            beatmapsets = api.search_beatmapsets(f'ranked<{year}-{month}-01')
+            beatmapsets = api.search_beatmapsets(query)
             for bms in beatmapsets.beatmapsets:
                 beatmapset = api.beatmapset(bms.id)
                 download_beatmap(beatmapset, config['OSU_SESSION_COOKIES'])
