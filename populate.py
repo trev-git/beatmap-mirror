@@ -28,7 +28,7 @@ def main():
 
     current_year = datetime.now().year
     for year in range(2007, current_year+1):
-        for month in range(1, 12):
+        for month in range(1, 13):
             if year == 2007 and month < 10:
                 continue
 
