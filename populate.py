@@ -15,21 +15,32 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import ossapi
+from datetime import datetime
 from dotenv import dotenv_values
 from download import download_beatmap
 from time import sleep
 
 
 def main():
+    months = [0, 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
     config = dotenv_values('.env')
     api = ossapi.Ossapi(config['CLIENT_ID'], config['CLIENT_SECRET'])
 
-    for i in range(2007, 2025):
-        beatmapsets = api.search_beatmapsets(f'ranked={i}')
-        for bms in beatmapsets.beatmapsets:
-            beatmapset = api.beatmapset(bms.id)
-            download_beatmap(beatmapset, config['OSU_SESSION_COOKIES'])
-            sleep(2)
+    current_year = datetime.now().year
+    for year in range(2007, current_year+1):
+        for month in range(1, 12):
+            if year == 2007 and month < 10:
+                continue
+
+            if year == current_year and month > datetime.now().month:
+                continue
+
+            print(f'Downloading maps from {months[month]} {year}')
+            beatmapsets = api.search_beatmapsets(f'ranked<{year}-{month}-01')
+            for bms in beatmapsets.beatmapsets:
+                beatmapset = api.beatmapset(bms.id)
+                download_beatmap(beatmapset, config['OSU_SESSION_COOKIES'])
+                sleep(2)
 
 
 if __name__ == '__main__':
