@@ -27,10 +27,10 @@ BASE_BEATMAPSET_FOLDER = pathlib.Path(f'{os.getenv("HOME")}/www/beatmaps')
 
 def download_beatmap(beatmapset: ossapi.Beatmapset, osu_session: str):
     beatmap_filename = f"{beatmapset.id} {beatmapset.artist} - {beatmapset.title}.osz"
-    download_folder = BASE_BEATMAPSET_FOLDER / str(beatmapset.ranked_date.year)
+    download_folder = BASE_BEATMAPSET_FOLDER / str(beatmapset.ranked_date.year) / str(beatmapset.ranked_date.month)
 
     if not download_folder.exists():
-        download_folder.mkdir(0o755)
+        download_folder.mkdir(0o755, parents=True)
 
     if (download_folder / beatmap_filename).exists():
         print(f'"{beatmap_filename}" already downloaded')
