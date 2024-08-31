@@ -17,7 +17,7 @@
 import ossapi
 from dotenv import dotenv_values
 from time import sleep
-from download import download_beatmap
+from beatmaps import download_beatmap
 
 
 def main():
@@ -26,8 +26,7 @@ def main():
 
     events = api.beatmapset_events(limit=10, page=1, user_id=None, types=[ossapi.BeatmapsetEventType.RANK])
     for event in events.events:
-        beatmapset = api.beatmapset(event.beatmapset.id)
-        download_beatmap(beatmapset, config['OSU_SESSION_COOKIES'])
+        download_beatmap(event.beatmapset, config['OSU_SESSION_COOKIES'])
         sleep(5)
 
 
