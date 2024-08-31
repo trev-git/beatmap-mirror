@@ -37,7 +37,7 @@ def download_beatmap(beatmapset: ossapi.BeatmapsetCompact, osu_session: str):
 
     if (download_folder / beatmapset_filename).exists():
         print(f'"{beatmapset_filename}" already downloaded')
-        return
+        return False
 
     with requests.sessions.Session() as s:
         s.cookies.set('osu_session', osu_session)
@@ -57,6 +57,7 @@ def download_beatmap(beatmapset: ossapi.BeatmapsetCompact, osu_session: str):
             for data in r.iter_content(chunk_size=1024):
                 size = f.write(data)
                 bar.update(size)
+    return True
 
 
 def count_beatmaps(client_id, client_secret):

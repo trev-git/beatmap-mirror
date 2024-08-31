@@ -46,7 +46,8 @@ def main():
             cursor = beatmapsets.cursor
             if cursor is None:
                 for beatmapset in beatmapsets.beatmapsets:
-                    download_beatmap(beatmapset, config['OSU_SESSION_COOKIES'])
+                    if not download_beatmap(beatmapset, config['OSU_SESSION_COOKIES']):
+                        continue
                     sleep(2)
             while cursor is not None:
                 for beatmapset in beatmapsets.beatmapsets:
