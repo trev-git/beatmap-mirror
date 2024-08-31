@@ -29,6 +29,7 @@ BASE_BEATMAPSET_FOLDER = pathlib.Path(f'{os.getenv("HOME")}/www/beatmaps')
 
 def download_beatmap(beatmapset: ossapi.BeatmapsetCompact, osu_session: str):
     beatmapset_filename = f"{beatmapset.id} {beatmapset.artist} - {beatmapset.title}.osz"
+    beatmapset_filename = beatmapset_filename.replace('/', '_')
     beatmapset_ranked_date = beatmapset.expand().ranked_date
     download_folder = BASE_BEATMAPSET_FOLDER / str(beatmapset_ranked_date.year) / str(beatmapset_ranked_date.month)
 
