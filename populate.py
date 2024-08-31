@@ -44,6 +44,10 @@ def main():
 
             beatmapsets = api.search_beatmapsets(query, explicit_content=ossapi.BeatmapsetSearchExplicitContent.SHOW)
             cursor = beatmapsets.cursor
+            if cursor is None:
+                for beatmapset in beatmapsets.beatmapsets:
+                    download_beatmap(beatmapset, config['OSU_SESSION_COOKIES'])
+                    sleep(2)
             while cursor is not None:
                 for beatmapset in beatmapsets.beatmapsets:
                     download_beatmap(beatmapset, config['OSU_SESSION_COOKIES'])
