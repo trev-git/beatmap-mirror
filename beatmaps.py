@@ -66,8 +66,6 @@ def count_beatmaps(client_id, client_secret):
     current_year = datetime.now().year
     for year in range(2007, current_year+1):
         for month in range(1, 13):
-            total = 0
-
             if year == 2007 and month < 10:
                 continue
 
@@ -81,12 +79,5 @@ def count_beatmaps(client_id, client_secret):
                 query += f'ranked<{year}-{month+1}-01'
 
             beatmapsets = api.search_beatmapsets(query, explicit_content=ossapi.BeatmapsetSearchExplicitContent.SHOW)
-            total += beatmapsets.total
-            cursor = beatmapsets.cursor
-            while cursor is not None:
-                beatmapsets = api.search_beatmapsets(query, cursor=cursor)
-                total += beatmapsets.total
-                cursor = beatmapsets.cursor
 
-            print(f'Total beatmapsets from {months[month]} {year}:\t{total} "{query}"')
-            sleep(1)
+            print(f'Total beatmapsets from {months[month]} {year}:\t{beatmapsets.total}')
