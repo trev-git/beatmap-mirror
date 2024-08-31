@@ -36,7 +36,7 @@ def main():
                 continue
 
             print(f'Downloading maps from {months[month]} {year}')
-            query = f'ranked>{year}-{month}-01 '
+            query = f'ranked>={year}-{month}-01 '
             if month == 12:
                 query += f'ranked<{year+1}-01-01'
             else:
