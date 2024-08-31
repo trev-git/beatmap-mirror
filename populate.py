@@ -17,7 +17,7 @@
 import ossapi
 from datetime import datetime
 from dotenv import dotenv_values
-from download import download_beatmap
+from beatmaps import download_beatmap
 from time import sleep
 
 
@@ -42,11 +42,14 @@ def main():
             else:
                 query += f'ranked<{year}-{month+1}-01'
 
-            beatmapsets = api.search_beatmapsets(query)
-            for bms in beatmapsets.beatmapsets:
-                beatmapset = api.beatmapset(bms.id)
-                download_beatmap(beatmapset, config['OSU_SESSION_COOKIES'])
-                sleep(2)
+            beatmapsets = api.search_beatmapsets(query, explicit_content=ossapi.BeatmapsetSearchExplicitContent.SHOW)
+            cursor = beatmapsets.cursor
+            while cursor is not None:
+                for beatmapset in beatmapsets.beatmapsets:
+                    download_beatmap(beatmapset, config['OSU_SESSION_COOKIES'])
+                    sleep(2)
+                beatmapsets = api.search_beatmapsets(query, explicit_content=ossapi.BeatmapsetSearchExplicitContent.SHOW, cursor=cursor)
+                cursor = beatmapsets.cursor
 
 
 if __name__ == '__main__':
